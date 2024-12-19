@@ -26,12 +26,12 @@ type clientImpl struct {
 func (c *clientImpl) Measure(batchRequest BatchRequest) (*Response, error) {
 	body, err := json.Marshal(batchRequest)
 	if err != nil {
-		return nil, fmt.Errorf("Error serializing request data: %v\n", err)
+		return nil, fmt.Errorf("error serializing request data: %v", err)
 	}
 
 	req, err := http.NewRequest("POST", c.endpoint, bytes.NewBuffer(body))
 	if err != nil {
-		return nil, fmt.Errorf("Error createing new request: %v\n", err)
+		return nil, fmt.Errorf("error createing new request: %v", err)
 	}
 
 	req.Header.Add("accept", "application/json")
@@ -40,24 +40,24 @@ func (c *clientImpl) Measure(batchRequest BatchRequest) (*Response, error) {
 
 	response, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("Error calling endpoint: %v\n", err)
+		return nil, fmt.Errorf("error calling endpoint: %v", err)
 	}
 
 	responseBody, err := io.ReadAll(response.Body)
 	if err != nil {
-		return nil, fmt.Errorf("Error reading response body: %v\n", err)
+		return nil, fmt.Errorf("error reading response body: %v", err)
 	}
 
 	// Check the HTTP status code
 	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("Non-OK HTTP status: %s\nResponse body: %s\n", response.Status, string(responseBody))
+		return nil, fmt.Errorf("non-OK HTTP status: %s\nResponse body: %s", response.Status, string(responseBody))
 	}
 
 	// Deserialize the response into the Response struct
 	var responseData Response
 	err = json.Unmarshal(responseBody, &responseData)
 	if err != nil {
-		return nil, fmt.Errorf("Error deserializing response JSON: %v\n", err)
+		return nil, fmt.Errorf("error deserializing response JSON: %v", err)
 	}
 
 	return &responseData, nil
