@@ -49,7 +49,14 @@ func (c *cachingClientImpl) Measure(batchRequest BatchCachingRequest) (*Response
 				if row.EnsureNotStale {
 					// Set an empty placeholder
 					results = append(results, Row{})
-					toRefresh[i] = row.Request
+					if row.EnsurePresent {
+						toRefresh[i] = row.Request
+					} else {
+						// Client just doesn't want stale data, OK with empty data.
+						// Refresh it in the background
+						toRefreshAsync = append(toRefreshAsync, row.Request)
+					}
+					
 				} else {
 					// Client is OK with stale data
 					results = append(results, cachedItem.Data)
@@ -62,7 +69,7 @@ func (c *cachingClientImpl) Measure(batchRequest BatchCachingRequest) (*Response
 
 	// Get data for responses that need to refreshed right now
 	if len(toRefresh) > 0 {
-		fmt.Printf("Refreshing %d item(s) in the main thread\n", len(toRefreshAsync))
+		fmt.Printf("Refreshing %d item(s) in the main thread\n", len(toRefresh))
 		var toRefreshRequest BatchRequest
 		for _, request := range toRefresh {
 			toRefreshRequest.Rows = append(toRefreshRequest.Rows, request)
