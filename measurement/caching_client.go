@@ -32,7 +32,7 @@ func (c *cachingClientImpl) Measure(batchRequest BatchCachingRequest) (*Response
 		if !exists {
 			// Set an empty placeholder
 			results = append(results, Row{})
-			if row.EnsurePresent || row.EnsureNotStale {
+			if row.EnsurePresent {
 				// It doesn't exist, but the client wants to wait for the result
 				toRefresh[i] = row.Request
 			} else {
@@ -56,7 +56,7 @@ func (c *cachingClientImpl) Measure(batchRequest BatchCachingRequest) (*Response
 						// Refresh it in the background
 						toRefreshAsync = append(toRefreshAsync, row.Request)
 					}
-					
+
 				} else {
 					// Client is OK with stale data
 					results = append(results, cachedItem.Data)

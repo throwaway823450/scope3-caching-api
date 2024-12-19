@@ -11,8 +11,13 @@
             "ensureNotStale": false
         },
         {
-            "inventoryId": "www.washingtonpost.com/",
+            "inventoryId": "washingtonpost.com",
             "ensurePresent": false,
+            "ensureNotStale": true
+        },
+        {
+            "inventoryId": "cnn.com",
+            "ensurePresent": true,
             "ensureNotStale": true
         }
     ]
