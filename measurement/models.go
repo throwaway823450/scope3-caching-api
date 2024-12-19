@@ -7,8 +7,19 @@ type Request struct {
 	InventoryId string `json:"inventoryId"`
 	UtcDatetime string `json:"utcDatetime"`
 }
+
 type BatchRequest struct {
 	Rows []Request `json:"rows"`
+}
+
+type CachingRequest struct {
+	Request
+	EnsurePresent  bool `json:"ensurePresent"`
+	EnsureNotStale bool `json:"ensureNotStale"`
+}
+
+type BatchCachingRequest struct {
+	Rows []CachingRequest `json:"rows"`
 }
 
 type Response struct {

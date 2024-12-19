@@ -20,8 +20,9 @@ func main() {
 	}
 	fmt.Println("Using API path: ", apiPath)
 	measurementClient := measurement.NewClient(apiPath, apiKey)
+	cachingClient := measurement.NewCachingClient(measurementClient)
 
-	router := api.NewRouter(measurementClient)
+	router := api.NewRouter(cachingClient)
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

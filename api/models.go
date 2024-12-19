@@ -1,7 +1,9 @@
 package api
 
 type Request struct {
-	InventoryId string `json:"inventoryId"`
+	InventoryId    string `json:"inventoryId"`
+	EnsurePresent  bool   `json:"ensurePresent"`
+	EnsureNotStale bool   `json:"ensureNotStale"`
 }
 
 type BatchRequest struct {

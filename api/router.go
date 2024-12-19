@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func NewRouter(measurementClient measurement.Client) http.Handler {
+func NewRouter(measurementClient measurement.CachingClient) http.Handler {
 	h := NewHandler(measurementClient)
 	r := mux.NewRouter().StrictSlash(true)
 

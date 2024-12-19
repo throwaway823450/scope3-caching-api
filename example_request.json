@@ -1,0 +1,19 @@
+{
+    "rows": [
+        {
+            "inventoryId": "nytimes.com",
+            "ensurePresent": false,
+            "ensureNotStale": false
+        },
+        {
+            "inventoryId": "bbc.com",
+            "ensurePresent": true,
+            "ensureNotStale": false
+        },
+        {
+            "inventoryId": "www.washingtonpost.com/",
+            "ensurePresent": false,
+            "ensureNotStale": true
+        }
+    ]
+}

@@ -17,10 +17,10 @@ const (
 
 // TODO: add interface to make testing easier
 type Handler struct {
-	measurementClient measurement.Client
+	measurementClient measurement.CachingClient
 }
 
-func NewHandler(measurementClient measurement.Client) Handler {
+func NewHandler(measurementClient measurement.CachingClient) Handler {
 	return Handler{measurementClient: measurementClient}
 }
 
@@ -37,14 +37,18 @@ func (h Handler) PostEmmisions(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	measurementRequest := measurement.BatchRequest{}
+	measurementRequest := measurement.BatchCachingRequest{}
 	for _, row := range batchRequest.Rows {
-		measurementRequest.Rows = append(measurementRequest.Rows, measurement.Request{
-			InventoryId: row.InventoryId,
-			Country:     defaultCountry,
-			Channel:     defaultChannel,
-			Impressions: defaultImpressions,
-			UtcDatetime: "2024-10-31", // TODO: determine date properly
+		measurementRequest.Rows = append(measurementRequest.Rows, measurement.CachingRequest{
+			Request: measurement.Request{
+				InventoryId: row.InventoryId,
+				Country:     defaultCountry,
+				Channel:     defaultChannel,
+				Impressions: defaultImpressions,
+				UtcDatetime: "2024-10-31", // TODO: determine date properly
+			},
+			EnsurePresent:  row.EnsurePresent,
+			EnsureNotStale: row.EnsureNotStale,
 		})
 	}
 
